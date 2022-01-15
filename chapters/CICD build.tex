@@ -1,0 +1,92 @@
+% Chapter 3
+
+\chapter{Continuous Integration and Delivery process} % Main chapter title
+
+\label{Chapter3} % For referencing the chapter elsewhere, use \ref{Chapter1} 
+
+This chapter introduce an example for the implementation of modern software integration and delivery process presented in Chapter \ref{Chapter2} and the concept of an effective \ac{CI} and \ac{CD} with the help of pipeline methodology, for applications in practise within the department. Section~\ref{section:Integrationtools} begins with a short introduction of the modern software integration tools used inside \emph{Bosch Thermotechnik} and highlight its importance. Subsequently, section~\ref{section:AdvantagesCICDpipeline} of this chapter discusses the need for an automated integration and delivery pipeline and improvements that can be introduced in the process.
+
+%----------------------------------------------------------------------------------------
+
+\section{Portfolio Tools} \label{section:Integrationtools}
+
+\subsection{Version Control}
+
+A version control is the most effective way of tracking projects with several developers who perform multiple revisions with collaborative development every day.\enquote{A tool that manages and tracks different versions of a software or other content is referred to generically as a \ac{VCS}, a Source Code Manager (SCM), a \ac{RCS}, and several other permutations of the word "revision," "version," "code," "content," "control," "management," and "system."}~\parencite{loeliger2012version}.
+
+A version control system improves code reproducibility by maintaining versions and revisions of the same software package. There are bunch of hosted version control system tools like Git, GNU Bazaar, Mercurial, SVN used in the industry. Among those, Git is particularly the most popular open source version control system which works perfectly with the implementation of CICD of software. 
+
+%----------------------------------------------------------------------------------------
+
+\subsection{Jenkins}
+
+In the context to the DevOps, Jenkins, a popular open-source automation server orchestrates the entire process of \ac{CI} and \ac{CD} of software. With number of available plugins in its marketplace, it is highly extensible. Jenkins has a concept of \ac{CI} pipeline for integration of software packages. The CI pipeline is simply a set of sequential or parallel jobs or both. These jobs can be configured via the GUI, and are defined to perform a set of task. 
+
+Developers can also define a CI pipeline \enquote{as code} and save it in a special file, called \emph{Jenkinsfile} in the source control repository alongside the source codes and test suites of a project. It is either written in Groovy script (Groovy \ac{DSL}) or as a Declarative Pipeline Syntax. These practice of defining a CI pipeline as code is known as \keyword{Pipeline as Code}~\parencite{pathania2017pro}. To achieve the goal of the thesis, the focus application was also build and integrated using the pipeline methodology of Jenkins.
+
+%----------------------------------------------------------------------------------------
+\subsection{Docker ecosystem}
+
+Docker is an open-source platform designed for packaging and deploying applications anywhere. Docker uses the concept of containerization to achieve complete isolation of applications. Without Docker, isolation of application can be achieved with virtualization, called virtual machines~\parencite{leszko2017continuous}. But a virtual machine requires lot of resources and the desktop performance becomes significantly low. The biggest advantage of containerization is the deployment of application using Docker containers and there is no need for a virtual machine. The Docker container is a running instance of a Docker image. Docker containers is like a lightweight virtual machine that sets up a computational environment, including all necessary tools, configurations and code within a single unit called image~\parencite{cito2016using}. A Docker image holds applications with all dependencies needed to run the application. The size of a Docker image is comparatively much smaller than a virtual machine image.  In today’s software development, containers improve the productivity by packaging applications into portable deployable units~\parencite{benedicic2019sarus}. This ultimately fastens the software delivery process.
+
+%----------------------------------------------------------------------------------------
+\subsection{Automated Testing Spectrum}
+
+Application or Software testing is a broad spectrum area and it is inevitable for most companies to validate its feature implementations or new enhancements before a product release. In \ac{SDLC}, the test phase plays a huge part~\parencite{nidhra2012black}. Indeed, it is a term used for quality assurance, which includes a lot of different approaches. In a general study by Beizer in his book ~\parencite{beizer2003software}, he mentions that testing adds up to approx fifty percent of the development cost. This gives an idea about the necessity of testing applications. For instance, there has been an increase amount of interest on "Test and Analysis" topics in recent software conference sessions~\parencite{4221614}. One can broadly classify software testing into black-box testing and white- box testing~\parencite{liu2009covering}. 
+
+Black-box test is generally preformed by the tester to test the features of a particular software without the idea of its internal structures. So, the test cases are designed based on the given specification and the focus is majorly on the output against a given input and conditions of executions. It can also be termed as functional testing~\parencite{nidhra2012black}. On the other hand, white-box testing or structural testing is mostly carried out by the developer and has prior knowledge about the source code, and the internal structures of programs to detect hidden errors for example, the data flow or control flow~\parencite{shao2007case}. Developers can also refer it as glass box testing. The thesis also conducted functional test runs against one such target application and generated the test reports which is a preparatory work prior to maturation research. The table given below illustrates the reader with state of art white and black-box testing types.
+%You can reference tables with \verb|\ref{<label>}| where the label is defined within the table environment.
+\begin{table}[ht!]
+\caption{Software Testing methodologies}
+%\catcode stuffif you must
+\label{tab:testing types}
+\centering
+\begin{tabular}{ |p{3cm}|p{3cm}|p{7cm}|  }
+ \hline
+ \multicolumn{3}{|c|}{Types of Testing} \\
+\toprule
+Types & Category & Scope \\
+\midrule    
+Unit testing&   White Box Testing& Individual units of the source code are tested. Limited to small unit of the application not larger than class~\parencite{nidhra2012black}.\\
+\midrule 
+Integration testing&   White and Black Box Testing  & It tests the individual components developed and tested separately, interact as expected when it is blended to design a part of larger system~\parencite{7100358}. \\
+\midrule 
+Functional testing & Black Box Testing & Tester validates against functional requirements, having no knowledge of source code. Application Programming Interface(API) and User Interface test are few functional testing types.  \\
+\midrule 
+Regression testing &White  and  Black Box Testing & Testing modified programs according to the (possibly modified) specification. It is usually executed in the maintenance phase where the software system may be corrected, adapted or enhanced to improve its performance~\parencite{65194}.\\
+\midrule 
+User acceptance testing& Black Box Testing & Performed at the final stage of SDC by Client and Customer. Stakeholder requirements specifications (StRS) and Proof of Concept (POC) should be available at hand.\\
+\hline
+\end{tabular}
+\end{table}
+
+
+Multiple software components are in use inside the department for development of connectivity gateway to interact with the target products. For example, a web configuration for the target hardware, Web \ac{API} for data exchange, SQLite for resource tree configuration of the Rest \ac{API}. The thesis work is focused on Rest API application which helps to interact with the backend device through interface. It uses the normal HTTP methods like GET, PUT, POST, DELETE for resources and the message payload is send or received in the form of a \ac{JSON} format. So, in order to validate the message payload, HTTP status code and other functionalities, the need for test strategy is prominent. Since, there are multiple resources used inside a time constraint project, manual testing would not be a great solution to validate its effectiveness and henceforth the introduction to automated API test.
+
+The main goal of an automation test is to minimize the manual human efforts as much as possible and verify the quality of particular software component or application to detect potential errors. In the product development phase, a test suite is defined and implemented to perform bulk testing of API to detect any potential error and rectify accordingly. The scope of API testing has increased enormously by the introduction of test automation frameworks and code stabilization. API testing gives in-depth insight into understanding the product for \ac{QA}. Early stage detection reduces the rate of defects at multiple levels ~\parencite{asha2015api}. The types of test scenarios for an automated API test cases have been clearly expressed in the literature survey of ~\parencite{sharma2018automated} paper:
+\begin{itemize}
+\item \keyword{Reliability tests} - Validate the API response status consistently.
+\item \keyword{Response body format validation} - Validate the structure of the JSON or XML response format.
+\item \keyword{Input validation} - Using different input parameters to verify the API response. The data, response status code shall be validated for each set of input parameters. Success (200) and unauthorized (403) forbidden status code shall be studied.
+\item \keyword{Validate allowable message payload} - Few resources only allows a particular message payload. So, publish a certain non-allowable message from the backend device and check the message payload on the REST resource. This helps to validate expected message content and response.
+\end{itemize}
+%----------------------------------------------------------------------------------------
+\section{Configuring the build pipeline}\label{section:CICDpipeline}
+
+The iterative software development process has been further accelerated  with the introduction of an automated build pipeline. The main purpose behind a build pipeline is to orchestrate the process of software build with quality checks. The pipeline contains multiple stages with steps, and with a single failure in either step results the entire pipeline build to fail~\parencite{soni2015end}.  It starts off with the integration of source control management and the CI server. The implementation concept presented in this section using Jenkins, which is best suited among other CI servers. The pipeline is better configured with a Pipeline script (Jenkinsfile).
+
+
+The last stage of the build pipeline is the automated deployment of software with all the output files such as the test reports. The results directory which includes the test reports are compressed and packaged to a .rar file which then gets deployed into the Bosch artifact repository.
+
+
+
+\section{Advantages}\label{section:AdvantagesCICDpipeline}
+
+
+%----------------------------------------------------------------------------------------
+\section{Identification of Concerns}\label{section:ConcernsCICDpipeline}
+
+
+
+
+\clearpage\null\thispagestyle{empty}

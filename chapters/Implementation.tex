@@ -1,0 +1,60 @@
+% Chapter 6
+
+\chapter{Implementation} % Main chapter title
+
+\label{Chapter 6} % For referencing the chapter elsewhere, use \ref{Chapter1} 
+
+%----------------------------------------------------------------------------------------
+To check and validate the process of Software Integration and Delivery at a Product level, this chapter presents a way of integrating the identified deliverables (see Section~\ref{section:SoftwareIntegrationDeliveryProductLevel}) into the Yocto delivery package by extending the functionalities provided by BitBake. In addition, the mechanism of class inheritance in recipes is used (see Section~\ref{section:recipes}). During the process, the Fetch, Download and Unpack approach is chosen (see Section~\ref{section:softwarepackageinrecipes}) to integrate the deliverables. The results are visualized in the form of local snapshots of the project release that contains the output image file and other deliverables packaged in a tarball.
+
+\vspace{0.2cm}
+\noindent The implementation stages have been divided in the following manner:
+\begin{itemize}
+\item \emph{Identification of the Fetch and Download approach, to showcase the extraction of deliverables into the Yocto build using BitBake class.}
+\item \emph{Extending the class functionalities to share between application recipes.}
+\item \emph{The validation of the implemented method.}
+
+\end{itemize}
+\vspace{0.2cm}
+%----------------------------------------------------------------------------------------
+\section{Implementation Concepts}
+
+Among other deliverables, the implementation work focuses on integrating the application test reports generated at the application level to the Yocto build system. The concept of BitBake class inheritance is reported in the fig \ref{fig:Class Inheritance}. With the inheritance mechanism, a recipe can inherit tasks and variables defined elsewhere within the Source directory. The class file (.bbclass) includes the task definitions written in BitBake style functions that are inherited by recipes but cannot be directly executed by BitBake~\parencite{violanteembedded}.
+
+
+\vspace{0.5cm}
+\begin{figure}[H]
+  \centering 
+\begin{tikzpicture}[
+    node distance=5mm and 30mm,
+box/.style = {draw, minimum height=12mm, align=center},
+sy+/.style = {yshift= 2mm}, 
+sy-/.style = {yshift=-2mm},
+every edge quotes/.style = {align=center}
+                        ]
+\node (n1) [box] {\textbf{exampleclass.bbclass}\\};                    
+\node (n2) [box,right=of n1] {\textbf{recipe.bb}\\(inherit exampleclass)};
+%
+\draw[thick,-Triangle]  
+    ([sy+] n1.east) to ([sy+] n2.west);
+\end{tikzpicture}
+\caption{Class Inheritance }\label{fig:Class Inheritance}
+\end{figure}    
+\vspace{0.5cm}
+
+
+\textbf{Recipe file for the application build}
+
+
+
+
+
+
+\textbf{Implementation of the BitBake class}
+
+
+
+
+
+    
+\clearpage\null\thispagestyle{empty}

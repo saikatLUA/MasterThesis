@@ -1,0 +1,1 @@
+source oe-init-build-env "BUILD_DIRECTORY_NAME"
