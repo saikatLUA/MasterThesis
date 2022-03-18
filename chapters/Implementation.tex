@@ -1,60 +1,116 @@
 % Chapter 6
 
-\chapter{Implementation} % Main chapter title
+\chapter{Implementation of the BitBake Class} % Main chapter title
 
 \label{Chapter 6} % For referencing the chapter elsewhere, use \ref{Chapter1} 
 
 %----------------------------------------------------------------------------------------
-To check and validate the process of Software Integration and Delivery at a Product level, this chapter presents a way of integrating the identified deliverables (see Section~\ref{section:SoftwareIntegrationDeliveryProductLevel}) into the Yocto delivery package by extending the functionalities provided by BitBake. In addition, the mechanism of class inheritance in recipes is used (see Section~\ref{section:recipes}). During the process, the Fetch, Download and Unpack approach is chosen (see Section~\ref{section:softwarepackageinrecipes}) to integrate the deliverables. The results are visualized in the form of local snapshots of the project release that contains the output image file and other deliverables packaged in a tarball.
+To check and validate the process of software integration and delivery at the product level (see Section~\ref{section:SoftwareIntegrationDeliveryProductLevel}), this chapter consider an example software component implemented within the department for embedded Linux development of its target product. It presents a way to integrate an identified internal deliverable to the Yocto delivery package. In addition, the class inheritance mechanism used in Yocto recipes are explained in Section~\ref{section:recipes}. The outlined example uses executable metadata in the form of Bitbake tasks such as the fetch, download and unpack module (see Section~\ref{section:softwarepackageinrecipes}) in the custom class file to integrate the required deliverables. The results are visualized in the form of local snapshots of the project release that contains the output image file and other deliverables packaged in a tarball. Gathering all the earlier basic implementation concepts, this chapter tries to answer the following questions.
+\vspace{0.2cm}
+
+\noindent Question 3: Which internal deliverable is the focus of this thesis ?
+
+
+
 
 \vspace{0.2cm}
-\noindent The implementation stages have been divided in the following manner:
+\noindent Question 4:  How to integrate the aforementioned internal deliverable into the product delivery package at the Yocto level ?
+\vspace{0.2cm}
+
+%----------------------------------------------------------------------------------------
+\section{Implementation Concept} \label{section:implementationapproach}
+
+Among other deliverables, the main focus of the work is to fetch an internal deliverable intended for initial development purpose within the project. The thesis work considers integrating the software validation reports or test reports (generated at \ac{SDLC} phase) during the Yocto build process and deploy it to the software delivery package alongside other deliverables of the target embedded product. The test or validation reports are the end result of \ac{CI} \ac{CD} preparatory implementation, outlined in Section~\ref{section:ImplementationOutline} and are deployed as tarball artifacts to the internal JFrog artifactory. This implementation approach is an extension of how BitBake parses and compiles the metadata files (recipe files, class files, configuration files) and how information are shared among them. Broadly achieved by extending the functionalities offered by BitBake, the implementation work is divided in the following stages.
+
+\vspace{0.2cm}
 \begin{itemize}
-\item \emph{Identification of the Fetch and Download approach, to showcase the extraction of deliverables into the Yocto build using BitBake class.}
-\item \emph{Extending the class functionalities to share between application recipes.}
-\item \emph{The validation of the implemented method.}
+\item \emph{Identification of the Fetch and Download approach, to showcase the extraction of deliverables into the Yocto delivery package using BitBake class}
+\item \emph{Extending the class functionalities by providing a simple inheritance mechanism to share among recipes files}
+\item \emph{The evaluation of the implemented method}
 
 \end{itemize}
 \vspace{0.2cm}
-%----------------------------------------------------------------------------------------
-\section{Implementation Concepts}
 
-Among other deliverables, the implementation work focuses on integrating the application test reports generated at the application level to the Yocto build system. The concept of BitBake class inheritance is reported in the fig \ref{fig:Class Inheritance}. With the inheritance mechanism, a recipe can inherit tasks and variables defined elsewhere within the Source directory. The class file (.bbclass) includes the task definitions written in BitBake style functions that are inherited by recipes but cannot be directly executed by BitBake~\parencite{violanteembedded}.
-
+The implemented custom class uses the fetcher implementation provided by BitBake for \ac{HTTP} and \ac{HTTPS} protocols. The recipe file, written for the intended application is modified where the source to the upstream artifactory or the address to the test report artifacts are provided. Accordingly, the recipe also inherits the implemented custom class. With the inheritance feature, the experimented recipe file can inherit tasks and variables defined in the implemented class. The inheritance mechanism also works if the class file is defined elsewhere within the Source Directory. The following flow (see figure~\ref{fig:Class Inheritance}) shows the class inheritance mechanism, where the inherit directive is added in the \texttt{<recipe>} file which uses the class name without an extension. BitBake identifies classes by the class name and not by filename, so it is mandatory to use an unique class name across all metadata layers included by the build environment~\parencite{Reference1}.
 
 \vspace{0.5cm}
 \begin{figure}[H]
-  \centering 
-\begin{tikzpicture}[
-    node distance=5mm and 30mm,
-box/.style = {draw, minimum height=12mm, align=center},
-sy+/.style = {yshift= 2mm}, 
-sy-/.style = {yshift=-2mm},
-every edge quotes/.style = {align=center}
-                        ]
-\node (n1) [box] {\textbf{exampleclass.bbclass}\\};                    
-\node (n2) [box,right=of n1] {\textbf{recipe.bb}\\(inherit exampleclass)};
-%
-\draw[thick,-Triangle]  
-    ([sy+] n1.east) to ([sy+] n2.west);
+\begin{tikzpicture}[node distance=2.0cm, inner sep=2mm, minimum width=1.5cm, >=stealth']
+\node [draw, rectangle, drop shadow, fill=gray!30] (V) at (4,0) {\texttt{<myclass.bbclass>}};
+\node [draw, rectangle, right=of V, drop shadow, fill=gray!30] (mech) at (9,0) {\texttt{<recipe.bb>}};
+
+
+\path [draw, ->] (V) edge node [fill=white] {\texttt{inherit myclass}} (mech);
 \end{tikzpicture}
-\caption{Class Inheritance }\label{fig:Class Inheritance}
-\end{figure}    
+\caption[Class Inheritance]{During the build process, BitBake parses the class files after successfully executing the configuration files and before parsing the recipe file~\parencite{Reference1}}\label{fig:Class Inheritance}
+\end{figure}
 \vspace{0.5cm}
 
 
-\textbf{Recipe file for the application build}
+%----------------------------------------------------------------------------------------
+\section{Implementation} \label{section:actualimplementation}
+
+
+Given the preceding approach, the application test reports are deployed into the Yocto delivery package. 
 
 
 
 
 
 
-\textbf{Implementation of the BitBake class}
 
 
 
 
 
+
+
+%----------------------------------------------------------------------------------------
+\vspace{0.5cm}
+\noindent \textbf{Custom Fetcher Implementation}
+\vspace{0.5cm}
+
+\noindent The implementation extends the common functionalities of the BitBake fetcher architecture. BitBake has its own fetcher module, coming from the \texttt{fetch2} library \texttt{(bitbake/lib/bb/fetch2)} which handles the fetch process and download of source files. The implemented class or the recipe should extend the \texttt{fetch} base class implementation and make modifications to the task accordingly. In case a verification is required to access the source package, it should be provided with the source address using the standard notation. Here, the \texttt{SRC\_URI} denotes the source or the upstream repositories of the files or source code that needs to be downloaded and is initialized either within the recipe file or class file. There can be multiple space-delimited list of URIs and during parsing it is converted into a list or an array. The Fetch class defers the actual processing of the URI and accessing the resource for a specific implementation identified by the schema of URI. The following listing \ref{lst:listing-ImplementationC} is a sample implementation of a custom executable task which extends the BitBake fetcher module. In the try block, the fetcher object is created and then the download method is called to download the upstream. The except block handles exception raised by the fetcher. The error or warnings are indicated here with the fatal message, which stops BitBake execution immediately~\parencite{Reference1}. In case of no exception found, BitBake logs a success statement with \texttt{bb.note}. The custom task implemented can be promoted for BitBake to execute, by easily adding it with the \texttt{addtask} keyword. In case of multiple task in each BitBake build, it is possible to define dependencies to run before or after the custom task\footnote{As illustrated, the \texttt{"before do\_build"} task is executed by default with the execution of the \texttt{base.bbclass}, so it is not mandatory to add it with the \texttt{"addtask"} command.}.
+
+
+\vspace{0.5cm}
+\lstset{style=mystyle}
+\lstinputlisting[caption= The custom \texttt{do\_fetchtest} task implemented for this use case uses the do\_fetch task defined in \texttt{base.bbclass}, captionpos=b,   basicstyle=\footnotesize, stepnumber=1, frame=lines, numbers=left, label={lst:listing-ImplementationC}, language=Python]{code/ImplementationC.bbclass}
+\vspace{0.5cm}
+
+During the build process, BitBake executes the tasks in a sequence according to the task dependencies. To list the series of tasks for a defined recipe, the \texttt{listtasks} command is used which provides the defined set of tasks. 
+
+\vspace{0.5cm}
+\lstset{style=mystyle}
+\lstinputlisting[caption= The series of tasks will be listed with description for a particular recipe with the given command, captionpos=b,   basicstyle=\footnotesize, stepnumber=1, frame=lines, numbers=left, label={lst:listing-ListTasks}, language=Python]{code/listtasks}
+\vspace{0.5cm}
+
+%----------------------------------------------------------------------------------------
+\noindent \textbf{Implementation of the BitBake class}
+\vspace{0.5cm}
+
+\noindent Class files are usually termed as special global recipes that are written under the \texttt{"classes/"} subdirectory inside any layer that the Build Directory includes. Since, classes are global, it can be inherited by any recipes located in other layers inside the build environment~\parencite{ Reference1}. As mentioned earlier, the custom \texttt{.bbclass} for the integration of the software package testreports is shown in Listing \ref{lst:listing-ImplementationB}.
+
+
+\vspace{0.5cm}
+\lstset{style=mystyle}
+\lstinputlisting[caption= Class (.bbclass) files specify the functionalities and tasks executed by BitBake, captionpos=b,   basicstyle=\footnotesize, stepnumber=1, frame=lines, numbers=left, label={lst:listing-ImplementationB}, language=Python]{code/ImplementationB.bbclass}
+\vspace{0.5cm}
+
+BitBake parses all the metadata files during the build and creates a metadata cache, which is a persistent form of metadata dictionary. It reads the metadata cache when there is no changes to the files, therefore reducing the overall build time significantly~\parencite{Reference1}.
+
+
+
+%----------------------------------------------------------------------------------------
+\vspace{0.5cm}
+\noindent \textbf{Modifications to the software package recipe}
+\vspace{0.5cm}
+
+\noindent The implementation approach to integrate the mentioned deliverable starts with describing a particular software package and how it is to be build. A recipe file starts with a source in the beginning, which provides the address \ac{URL}'s of software packages. These sources are often referred as \emph{upstream repositories}. The recipe file also includes other metadata executable such as tasks. Listing \ref{lst:listing-ImplementationA} shows the implementation of a sample recipe file, where the recipe file holds the source address of the Rest API application package along with its test reports. A custom metadata class \texttt{"packagetestreports"} file is included in the recipe file by using the inherit directive.
+
+\vspace{0.5cm}
+\lstset{style=mystyle}
+\lstinputlisting[caption= Implementation of the recipe file, captionpos=b,   basicstyle=\footnotesize, stepnumber=1, frame=lines, numbers=left, label={lst:listing-ImplementationA}, language=Python]{code/ImplementationA.bb}
+\vspace{0.5cm}
     
 \clearpage\null\thispagestyle{empty}

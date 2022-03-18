@@ -1,0 +1,37 @@
+Black-box test is generally preformed by the tester to test the features of a particular software without the idea of its internal structures. So, the test cases are designed based on the given specification and the focus is majorly on the output against a given input and conditions of executions. It can also be termed as functional testing~\parencite{nidhra2012black}. On the other hand, white-box testing or structural testing is mostly carried out by the developer and has prior knowledge about the source code, and the internal structures of programs to detect hidden errors for example, the data flow or control flow~\parencite{shao2007case}. Developers can also refer it as glass box testing. The thesis also conducted functional test runs against one such target application and generated the test reports which is a preparatory work prior to maturation research. The table given below illustrates the reader with state of art white and black-box testing types.
+%You can reference tables with \verb|\ref{<label>}| where the label is defined within the table environment.
+\begin{table}[ht!]
+\caption{Software Testing methodologies}
+%\catcode stuffif you must
+\label{tab:testing types}
+\centering
+\begin{tabular}{ |p{3cm}|p{3cm}|p{7cm}|  }
+ \hline
+ \multicolumn{3}{|c|}{Types of Testing} \\
+\toprule
+Types & Category & Scope \\
+\midrule    
+Unit testing&   White Box Testing& Individual units of the source code are tested. Limited to small unit of the application not larger than class~\parencite{nidhra2012black}.\\
+\midrule 
+Integration testing&   White and Black Box Testing  & It tests the individual components developed and tested separately, interact as expected when it is blended to design a part of larger system~\parencite{7100358}. \\
+\midrule 
+Functional testing & Black Box Testing & Tester validates against functional requirements, having no knowledge of source code. Application Programming Interface(API) and User Interface test are few functional testing types.  \\
+\midrule 
+Regression testing &White  and  Black Box Testing & Testing modified programs according to the (possibly modified) specification. It is usually executed in the maintenance phase where the software system may be corrected, adapted or enhanced to improve its performance~\parencite{65194}.\\
+\midrule 
+User acceptance testing& Black Box Testing & Performed at the final stage of SDC by Client and Customer. Stakeholder requirements specifications (StRS) and Proof of Concept (POC) should be available at hand.\\
+\hline
+\end{tabular}
+\end{table}
+
+
+are in use inside the department for development of connectivity gateway to interact with the target products. For example, a web configuration for the target hardware, Web \ac{API} for data exchange, SQLite for resource tree configuration of the Rest \ac{API}. 
+
+
+The types of test scenarios for an automated API test cases have been clearly expressed in the literature survey of ~\parencite{sharma2018automated} paper:
+\begin{itemize}
+\item \keyword{Reliability tests} - Validate the API response status consistently.
+\item \keyword{Response body format validation} - Validate the structure of the JSON or XML response format.
+\item \keyword{Input validation} - Using different input parameters to verify the API response. The data, response status code shall be validated for each set of input parameters. Success (200) and unauthorized (403) forbidden status code shall be studied.
+\item \keyword{Validate allowable message payload} - Few resources only allows a particular message payload. So, publish a certain non-allowable message from the backend device and check the message payload on the REST resource. This helps to validate expected message content and response.
+\end{itemize}

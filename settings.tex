@@ -55,9 +55,14 @@
     long = Continuous Integration,
     tag = abbrev
     }
+\DeclareAcronym{SemVer}{
+    short = SemVer ,
+    long = Semantic Versioning,
+    tag = abbrev
+    }
 \DeclareAcronym{CD}{
     short = CD ,
-    long = Continuous Deployment,
+    long = Continuous Delivery,
     tag = abbrev
     }
 \DeclareAcronym{SDLC}{
@@ -135,6 +140,11 @@
     long = Command Line Interface,
     tag = abbrev
     }
+\DeclareAcronym{OE}{
+    short = OE ,
+    long = Open Embedded,
+    tag = abbrev
+    }
 \DeclareAcronym{BDC}{
     short = BDC ,
     long = Bosch Development Cloud,
@@ -150,9 +160,24 @@
     long = Version Control System,
     tag = abbrev
     }
+\DeclareAcronym{EV}{
+    short = EV ,
+    long = Electric Vehicle,
+    tag = abbrev
+    }
+\DeclareAcronym{RC}{
+    short = RC,
+    long = Release Candidate,
+    tag = abbrev
+    }
 \DeclareAcronym{RCS}{
     short = RCS ,
     long = Revision Control System,
+    tag = abbrev
+    }
+\DeclareAcronym{ISC}{
+    short = ISC ,
+    long = Internet Software Consortium,
     tag = abbrev
     }
 \DeclareAcronym{URL}{
@@ -163,6 +188,16 @@
 \DeclareAcronym{DSL}{
     short = DSL ,
     long = Domain Specific Language,
+    tag = abbrev
+    }
+\DeclareAcronym{SDK}{
+    short = SDK ,
+    long =  Software Development Kit,
+    tag = abbrev
+    }
+\DeclareAcronym{IT}{
+    short = IT ,
+    long =  Information Technology,
     tag = abbrev
     }
 \bibliography{bibliography}
@@ -206,6 +241,7 @@
 }
 
 \usepackage{xcolor}
+\usepackage{smartdiagram}  
 \usepackage[dvipsnames]{xcolor}
 \definecolor{codegreen}{RGB}{2,112,10}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -285,3 +321,30 @@
 }
 \usepackage{enumitem}
 \renewbibmacro{in:}{}
+
+\usetikzlibrary{arrows.meta}
+\tikzset{%
+  >={Latex[width=2mm,length=2mm]},
+  % Specifications for style of nodes:
+            base/.style = {rectangle, rounded corners, draw=black,
+                           minimum width=4cm, minimum height=1cm,
+                           text centered, font=\sffamily},
+  activityStarts/.style = {base, fill=blue!30},
+  buildrepo/.style = {base, fill=gray!30},
+   middle/.style = {base, fill=gray!30},
+       startstop/.style = {base, fill=gray!30},
+    activityRuns/.style = {base, fill=blue!30},
+         process/.style = {base, minimum width=2.5cm, fill=gray!30,
+                           font=\ttfamily},
+}
+\usetikzlibrary{positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{arrows, positioning, shadows}
+\usetikzlibrary{shapes.geometric,calc}
+\smartdiagramset{uniform color list=gray!50 for 6 items}
+\usepackage{tabu}
+\usepackage{longtable}
+\usepackage[table]{xcolor}
+\usepackage{booktabs,tabularx}
+\usepackage[input-decimal-markers=.]{siunitx}
+\usepackage{lipsum}

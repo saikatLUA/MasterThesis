@@ -1,0 +1,38 @@
+#! Jenkinsfile (Declarative Pipeline)
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+            sh './configuration.sh'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh './runtest.sh'
+            }
+        }
+        stage('Publish') {
+            steps {
+                script{
+                step(
+                [
+                $class              : 'RobotPublisher',
+                outputPath          : 'test/results',
+                outputFileName      : "output.xml",
+                reportFileName      : 'report.html',
+                logFileName         : 'log.html',
+                passThreshold       : 100.0,
+                unstableThreshold   : 90.0,
+                ]
+                )
+                }
+            }
+        }
+        stage('Deployment') {
+            steps {
+                sh './deployment.sh'
+            }
+        }
+    }
+}

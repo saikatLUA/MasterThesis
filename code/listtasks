@@ -1,0 +1,1 @@
+bitbake <recipe> -c listtasks
